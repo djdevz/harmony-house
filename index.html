@@ -5,34 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Harmony House</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div id="intro-screen">
+    <div id="intro-screen" onclick="startGame()">
         <div class="logo-title">HARMONY</div>
-        <div class="logo-sub">restore the order</div>
+        <div class="tap-start">Tap to Enter</div>
     </div>
 
     <audio id="bgm" loop>
         <source src="assets/audio/music.mp3" type="audio/mpeg">
     </audio>
-    <audio id="sfx-pop">
-        <source src="assets/audio/pop.wav" type="audio/wav">
-    </audio>
-    <audio id="sfx-click">
-        <source src="assets/audio/click.wav" type="audio/wav">
-    </audio>
-    <audio id="sfx-slide">
-        <source src="assets/audio/slide.wav" type="audio/wav">
-    </audio>
+    <audio id="sfx-pop"><source src="assets/audio/pop.wav"></audio>
+    <audio id="sfx-click"><source src="assets/audio/click.wav"></audio>
+    <audio id="sfx-slide"><source src="assets/audio/slide.wav"></audio>
 
     <div id="ui-layer">
-        <button id="audio-btn" onclick="toggleAudio()">🔇</button>
+        <button class="icon-btn" id="share-btn" onclick="shareGame()">🔗</button>
+        <button class="icon-btn" id="audio-btn" onclick="toggleAudio()">🔊</button>
     </div>
 
-    <div id="game-container">
-        </div>
+    <div id="game-container"></div>
+
+    <div id="splash-screen">
+        <div class="splash-title">Perfect.</div>
+        <p id="splash-msg">The room is in order.</p>
+        <button class="splash-btn" onclick="nextLevel()">Continue</button>
+    </div>
 
     <script src="game.js"></script>
 </body>
