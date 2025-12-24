@@ -1,0 +1,115 @@
+:root {
+    /* Darker Pastel Theme */
+    --bg-color: #6a7b9c; /* Slate Blue */
+    --wall-color: #f7e6e3; /* Dirty White */
+    --accent: #d48c96; /* Dusty Rose */
+    --dark-text: #4a4a4a;
+    --shadow: rgba(44, 62, 80, 0.3);
+    
+    /* Palette for Art Generation */
+    --p1: #e27d60; --p2: #85dcba; --p3: #e8a87c; --p4: #c38d9e; --p5: #41b3a3;
+}
+
+body {
+    margin: 0;
+    font-family: 'Quicksand', sans-serif;
+    /* Artsy Pattern Background using CSS gradients */
+    background-color: var(--bg-color);
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255,255,255,0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(255,255,255,0.1) 0%, transparent 20%),
+        linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 75%),
+        linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 75%);
+    background-size: 100% 100%, 100% 100%, 60px 60px, 60px 60px;
+    background-position: 0 0, 0 0, 0 0, 30px 30px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    user-select: none;
+}
+
+/* INTRO LOGO */
+#intro-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #2c3e50; /* Dark Slate */
+    z-index: 999;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    color: #f7e6e3;
+    transition: opacity 1.5s ease-out;
+}
+.logo-title {
+    font-size: 4rem; font-weight: 300; letter-spacing: 5px;
+    margin-bottom: 10px;
+    animation: fadeUp 1s ease-out;
+}
+.logo-sub {
+    font-size: 1.2rem; opacity: 0.7; font-family: 'Courier New', monospace;
+    animation: fadeUp 1.2s ease-out;
+}
+
+/* GAME CONTAINER */
+#game-container {
+    width: 90%; max-width: 800px; height: 80vh;
+    background-color: var(--wall-color);
+    border-radius: 15px;
+    box-shadow: 0 30px 60px var(--shadow);
+    position: relative;
+    display: flex; justify-content: center; align-items: center;
+    overflow: hidden;
+    /* Inner shadow for depth */
+    box-shadow: inset 0 0 80px rgba(0,0,0,0.05), 0 30px 60px var(--shadow);
+}
+
+/* UI BUTTONS */
+#ui-layer { position: absolute; top: 20px; right: 20px; z-index: 100; }
+#audio-btn {
+    background: none; border: none; font-size: 2rem;
+    cursor: pointer; opacity: 0.6; color: var(--wall-color);
+    transition: transform 0.2s;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+#audio-btn:hover { transform: scale(1.1); opacity: 1; }
+
+/* LEVEL 1: GALLERY */
+.gallery-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; padding: 20px;
+}
+.photo-frame {
+    width: 130px; height: 130px;
+    background: white; padding: 12px;
+    box-shadow: 5px 10px 15px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+}
+/* The SVG Art Container */
+.art-canvas { width: 100%; height: 100%; background: #eee; overflow: hidden; }
+
+/* LEVEL 2: SHELF */
+.shelf {
+    display: flex; align-items: flex-end; gap: 4px;
+    height: 300px; padding: 0 40px;
+    border-bottom: 15px solid #5d4037; /* Dark Wood */
+}
+.book {
+    width: 45px; border-radius: 3px 3px 0 0;
+    cursor: pointer; position: relative;
+    box-shadow: inset 3px 0 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+.book:hover { transform: translateY(-10px); }
+.book.floating {
+    transform: translateY(-50px) scale(1.05);
+    z-index: 10; box-shadow: 0 20px 30px rgba(0,0,0,0.3);
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.fade-out { opacity: 0; pointer-events: none; }

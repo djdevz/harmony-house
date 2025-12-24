@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Harmony House</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="intro-screen">
+        <div class="logo-title">HARMONY</div>
+        <div class="logo-sub">restore the order</div>
+    </div>
+
+    <audio id="bgm" loop>
+        <source src="assets/audio/music.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sfx-pop">
+        <source src="assets/audio/pop.wav" type="audio/wav">
+    </audio>
+    <audio id="sfx-click">
+        <source src="assets/audio/click.wav" type="audio/wav">
+    </audio>
+    <audio id="sfx-slide">
+        <source src="assets/audio/slide.wav" type="audio/wav">
+    </audio>
+
+    <div id="ui-layer">
+        <button id="audio-btn" onclick="toggleAudio()">🔇</button>
+    </div>
+
+    <div id="game-container">
+        </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
