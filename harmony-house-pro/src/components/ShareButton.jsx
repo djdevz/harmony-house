@@ -1,30 +1,54 @@
-import { Share2 } from 'lucide-react'; // Icon library
+import React, { useState } from 'react';
 
 export default function ShareButton() {
+  const [copied, setCopied] = useState(false);
+
   const handleShare = async () => {
     const shareData = {
       title: 'Harmony House',
-      text: 'I just reorganized the kitchen! Can you beat my zen?',
+      text: 'Restore order in the house.',
       url: window.location.href
     };
 
-    if (navigator.share) {
-      // Use the native mobile share sheet
-      try {
+    try {
+      if (navigator.share) {
         await navigator.share(shareData);
-      } catch (err) {
-        console.log('Share canceled');
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
       }
-    } else {
-      // Fallback for Desktop (Copy to clipboard)
-      navigator.clipboard.writeText(window.location.href);
-      alert('Link copied to clipboard!');
+    } catch (err) {
+      console.log('Share canceled');
     }
   };
 
   return (
-    <button onClick={handleShare} className="icon-btn">
-      <Share2 size={24} />
+    <button 
+      onClick={handleShare} 
+      style={styles.btn}
+      title="Share Harmony"
+    >
+      {copied ? "✓ Copied" : "Share 🔗"}
     </button>
   );
 }
+
+const styles = {
+  btn: {
+    background: '#fdf6e3', // Cream paper color
+    color: '#d48c96',       // Rose accent
+    border: '1px solid #d48c96',
+    padding: '8px 16px',
+    borderRadius: '4px',    // Slight rounding, like a ticket
+    fontFamily: 'Quicksand, sans-serif',
+    fontWeight: 'bold',
+    fontSize: '0.9rem',
+    cursor: 'pointer',
+    boxShadow: '2px 2px 0px rgba(212, 140, 150, 0.4)', // Hard shadow for paper effect
+    transition: 'transform 0.1s',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '5px'
+  }
+};

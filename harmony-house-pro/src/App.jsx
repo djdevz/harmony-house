@@ -2,84 +2,117 @@ import React, { useState } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 
+// Components
 import MenuScreen from './components/MenuScreen';
 import SplashScreen from './components/SplashScreen';
+import LevelSelectScreen from './components/LevelSelectScreen';
+
+// Levels
 import LevelCutlery from './levels/LevelCutlery';
 import LevelBooks from './levels/LevelBooks';
+import LevelCans from './levels/LevelCans';
+import LevelTea from './levels/LevelTea';
+import LevelPlants from './levels/LevelPlants';
+import LevelDaily from './levels/LevelDaily'; // New Import
 
-// Level Config
+// The Main Level List
 const levels = [
   { id: 'cutlery', comp: LevelCutlery, title: 'Silverware' },
   { id: 'books', comp: LevelBooks, title: 'Bookshelf' },
+  { id: 'cans', comp: LevelCans, title: 'The Pantry' },
+  { id: 'tea', comp: LevelTea, title: 'Tea Time' },
+  { id: 'plants', comp: LevelPlants, title: 'Pruning' },
 ];
 
 export default function App() {
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
   const [showSplash, setShowSplash] = useState(false);
 
-  // Check if we are currently playing Daily mode
+  // Check mode
   const isDaily = location.pathname === '/daily';
 
+  // --- ACTIONS ---
+  
   const handleWin = () => {
     setShowSplash(true);
   };
 
-  const handleNext = () => {
+  const goToNextLevel = () => {
     setShowSplash(false);
-    
-    // --- THE FIX IS HERE ---
-    if (isDaily) {
-      navigate('/'); // Go back to Menu
+    const currentId = location.pathname.split('/').pop();
+    const currentIdx = levels.findIndex(l => l.id === currentId);
+    if (currentIdx !== -1 && currentIdx < levels.length - 1) {
+       navigate(`/play/${levels[currentIdx + 1].id}`);
     } else {
-      // Logic for Level Select (Find current level and go to next)
-      const currentId = location.pathname.split('/').pop();
-      const currentIdx = levels.findIndex(l => l.id === currentId);
-      
-      // If we are at the last level, loop to start, or go to menu
-      if (currentIdx === -1 || currentIdx === levels.length - 1) {
-         navigate('/'); // Done with all levels? Go menu.
-      } else {
-         const nextIdx = currentIdx + 1;
-         navigate(`/play/${levels[nextIdx].id}`);
-      }
+       navigate('/levels'); // No next level? Go to selection.
     }
   };
 
-  // Helper for smooth animations
-  const PageWrapper = ({ children }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-      style={{ width: '100%', height: '100%' }}
-    >
-      {children}
-    </motion.div>
-  );
+  const goToMenu = () => {
+    setShowSplash(false);
+    navigate('/');
+  };
+
+  const goToLevelSelect = () => {
+    setShowSplash(false);
+    navigate('/levels');
+  };
+
+  // --- SPLASH SCREEN CONFIGURATION ---
+
+  const getSplashProps = () => {
+    if (isDaily) {
+      return {
+        title: "Daily Tidy Complete",
+        primaryAction: { label: "Back to Menu", onClick: goToMenu },
+        secondaryAction: null // Daily only goes back home
+      };
+    } else {
+      // Standard Level Logic
+      const currentId = location.pathname.split('/').pop();
+      const currentIdx = levels.findIndex(l => l.id === currentId);
+      const hasNext = currentIdx !== -1 && currentIdx < levels.length - 1;
+
+      return {
+        title: "Harmony Restored",
+        // If there is a next level, Primary is "Next". If last level, Primary is "Level Select"
+        primaryAction: hasNext 
+          ? { label: "Next Level →", onClick: goToNextLevel }
+          : { label: "Select Another", onClick: goToLevelSelect },
+        
+        // Secondary is always "Main Menu" (or Select Level if you prefer)
+        secondaryAction: { label: "Main Menu", onClick: goToMenu }
+      };
+    }
+  };
+
+  const splashProps = getSplashProps();
 
   return (
-    <div className="app-container">
+    <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>
+      
       <AnimatePresence>
         {showSplash && (
           <SplashScreen 
-            // Change title/button based on mode
-            title={isDaily ? "Daily Complete" : "Harmony Restored"} 
-            onNext={handleNext}
-            buttonText={isDaily ? "Back to Menu" : "Next Level →"} 
+            title={splashProps.title}
+            primaryAction={splashProps.primaryAction}
+            secondaryAction={splashProps.secondaryAction}
           />
         )}
       </AnimatePresence>
 
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
+          
           <Route path="/" element={<PageWrapper><MenuScreen /></PageWrapper>} />
           
-          {/* Daily Route */}
-          <Route path="/daily" element={<PageWrapper><LevelBooks onWin={handleWin} /></PageWrapper>} />
+          <Route path="/levels" element={<PageWrapper><LevelSelectScreen levels={levels} /></PageWrapper>} />
 
-          {/* Level Routes */}
+          {/* Daily Route uses the new Complex Level */}
+          <Route path="/daily" element={<PageWrapper><LevelDaily onWin={handleWin}/></PageWrapper>} />
+
+          {/* Standard Levels */}
           {levels.map((lvl) => (
             <Route 
               key={lvl.id} 
@@ -87,11 +120,21 @@ export default function App() {
               element={<PageWrapper><lvl.comp onWin={handleWin} /></PageWrapper>} 
             />
           ))}
-          
-          {/* Fallback */}
-          <Route path="/levels" element={<PageWrapper><LevelCutlery onWin={handleWin} /></PageWrapper>} />
+
         </Routes>
       </AnimatePresence>
     </div>
   );
 }
+
+const PageWrapper = ({ children }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+    transition={{ duration: 0.5, ease: "easeOut" }}
+    style={{ width: '100%', height: '100%' }}
+  >
+    {children}
+  </motion.div>
+);
