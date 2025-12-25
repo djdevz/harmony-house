@@ -1,0 +1,31 @@
+:root {
+  --bg-color: #e6e2dd; /* Washi Paper base */
+  --accent: #d48c96;   /* Muted Rose */
+  --text: #5d5d5d;     /* Soft Charcoal */
+}
+
+body {
+  margin: 0;
+  font-family: 'Quicksand', sans-serif;
+  
+  /* Use the absolute path to the public folder */
+  background-image: url('/bg.webp');
+  
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  color: var(--text);
+}
+
+.app-container {
+  width: 100%;
+  max-width: 600px; /* Mobile focused width */
+  height: 100%;
+  position: relative;
+}
