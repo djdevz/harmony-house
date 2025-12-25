@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 
 // Components
+import AudioController, { playSound } from './components/AudioController';
 import MenuScreen from './components/MenuScreen';
 import SplashScreen from './components/SplashScreen';
 import LevelSelectScreen from './components/LevelSelectScreen';
@@ -35,6 +36,7 @@ export default function App() {
   // --- ACTIONS ---
   
   const handleWin = () => {
+    playSound('win');
     setShowSplash(true);
   };
 
@@ -91,7 +93,7 @@ export default function App() {
 
   return (
     <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>
-      
+      <AudioController />
       <AnimatePresence>
         {showSplash && (
           <SplashScreen 

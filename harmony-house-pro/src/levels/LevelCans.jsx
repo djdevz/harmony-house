@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import ShareButton from '../components/ShareButton';
+import { playSound } from '../components/AudioController';
 
 export default function LevelCans({ onWin }) {
   // 0=Front, 1=Side, 2=Back. We start them scrambled.
@@ -23,7 +24,17 @@ export default function LevelCans({ onWin }) {
 
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ position:'absolute', top:10, left:20 }}><Link to="/" style={{textDecoration:'none'}}>← Menu</Link></div>
+      <div style={{ position:'absolute', top:10, left:20 }}>
+  <Link to="/" style={{ textDecoration: 'none' }}>
+     <button style={{
+        background: 'rgba(255,255,255,0.8)', border: 'none', padding: '10px 20px',
+        borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', color: '#555',
+        boxShadow: '0 2px 5px rgba(0,0,0,0.1)', fontFamily: 'Quicksand'
+     }}>
+       ← Menu
+     </button>
+  </Link>
+</div>
       <div style={{ position:'absolute', top:10, right:20 }}><ShareButton /></div>
 
       <h2 style={{ textAlign: 'center', marginTop: 60, color:'#555' }}>Labels Forward</h2>
@@ -35,7 +46,10 @@ export default function LevelCans({ onWin }) {
         {cans.map((face, i) => (
           <motion.div
             key={i}
-            onClick={() => rotateCan(i)}
+            onClick={() => {
+              rotateCan(i);
+              playSound('click');
+            }}
             whileTap={{ scale: 0.95 }}
             style={{
               width: 60, height: 100, borderRadius: 5, cursor: 'pointer',

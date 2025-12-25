@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Reorder } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { playSound } from '../components/AudioController';
 
 export default function LevelDaily({ onWin }) {
   // --- STATE FOR 3 MINI GAMES ---
@@ -39,9 +40,23 @@ export default function LevelDaily({ onWin }) {
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
       
-      <div style={{ position:'absolute', top:10, left:20 }}>
-        <Link to="/" style={{textDecoration:'none', color:'#555', fontWeight:'bold'}}>← Give Up</Link>
-      </div>
+      <div style={{ position:'absolute', top:10, left:20, zIndex: 10 }}>
+  <Link to="/" style={{ textDecoration: 'none' }}>
+    <button style={{
+      background: 'rgba(255,255,255,0.8)', 
+      border: 'none', 
+      padding: '10px 20px',
+      borderRadius: '20px', 
+      cursor: 'pointer', 
+      fontWeight: 'bold', 
+      color: '#555',
+      boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+      fontFamily: 'Quicksand, sans-serif' // Ensures font matches
+    }}>
+      ← Give Up
+        </button>
+    </Link>
+    </div>
       
       <h2 style={{ color: '#555', marginBottom: 40 }}>The Morning Room</h2>
 
@@ -56,7 +71,10 @@ export default function LevelDaily({ onWin }) {
         <div style={{ position: 'absolute', top: 50, left: '50%', transform: 'translateX(-50%)' }}>
           <motion.div
             animate={{ rotate: rotation }}
-            onClick={() => setRotation(r => (r === 0 ? 15 : 0))} // Toggle for interaction
+            onClick={() => {
+                setRotation(r => (r === 0 ? 15 : 0));
+                playSound('click');
+            }}
             style={{ 
               width: 100, height: 80, background: '#fff', 
               border: '4px solid #d48c96', boxShadow: '0 5px 10px rgba(0,0,0,0.1)',
@@ -68,16 +86,36 @@ export default function LevelDaily({ onWin }) {
         </div>
 
         {/* TASK 2: THE BOOKSHELF (Bottom Left) */}
-        <div style={{ position: 'absolute', bottom: 100, left: 20 }}>
-          <div style={{ width: 120, height: 10, background: '#8d6e63', marginBottom: 0 }}></div>
-          <Reorder.Group axis="x" values={books} onReorder={setBooks} style={{ display: 'flex', gap: 2, padding: 0, listStyle:'none', position:'absolute', bottom: 10 }}>
-            {books.map(b => (
-              <Reorder.Item key={b.id} value={b} style={{ listStyle:'none' }}>
-                <div style={{ width: 25, height: b.h, background: b.c, borderRadius: '2px 2px 0 0', cursor: 'grab' }}></div>
-              </Reorder.Item>
-            ))}
-          </Reorder.Group>
-        </div>
+<div style={{ position: 'absolute', bottom: 100, left: 20 }}>
+  {/* The Shelf Line */}
+  <div style={{ width: 120, height: 10, background: '#8d6e63', marginBottom: 0 }}></div>
+  
+  {/* The Books - Force them to sit on the bottom */}
+  <Reorder.Group 
+    axis="x" 
+    values={books} 
+    onReorder={setBooks} 
+    style={{ 
+      display: 'flex', 
+      alignItems: 'flex-end',
+      gap: 2, 
+      padding: 0, 
+      listStyle:'none', 
+      position:'absolute', 
+      bottom: 10, // Sit exactly on the shelf
+      height: 60 // Give them space to stand up
+    }}
+  >
+    {books.map(b => (
+      <Reorder.Item key={b.id} value={b} style={{ listStyle:'none' }}>
+        <div 
+            onPointerDown={() => playSound('pop')}
+            style={{ width: 25, height: b.h, background: b.c, borderRadius: '2px 2px 0 0', cursor: 'grab' }}
+        ></div>
+      </Reorder.Item>
+        ))}
+        </Reorder.Group>
+    </div>
 
         {/* TASK 3: THE PLANT (Bottom Right) */}
         <div style={{ position: 'absolute', bottom: 30, right: 30 }}>
@@ -94,7 +132,10 @@ export default function LevelDaily({ onWin }) {
             {leafDead && (
               <motion.div
                 exit={{ y: 50, opacity: 0, rotate: 90 }}
-                onClick={() => setLeafDead(false)}
+                onClick={() => {
+                    setLeafDead(false);
+                    playSound('pop');
+                }}
                 style={{ 
                   width: 30, height: 30, background: '#8d6e63', 
                   borderRadius: '0 50% 0 50%', position: 'absolute', bottom: 70, right: -10,

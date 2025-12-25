@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Reorder, motion } from 'framer-motion';
+import { playSound } from '../components/AudioController';
 
-// !!! THE FIX IS HERE: "export default" !!!
 export default function LevelBooks({ onWin }) {
   const [items, setItems] = useState([
     { id: '1', h: 140, color: '#2c3e50' },
@@ -39,6 +39,7 @@ export default function LevelBooks({ onWin }) {
             <Reorder.Item key={item.id} value={item} style={{ listStyle: 'none' }}>
               <motion.div
                 layout
+                onPointerDown={() => playSound('pop')}
                 style={{
                   width: 45,
                   height: item.h,

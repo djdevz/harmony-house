@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import ShareButton from '../components/ShareButton'; // Ensure path is correct
+import { playSound } from '../components/AudioController';
 
 // --- RESPONSIVE CSS ART ---
 // We use viewBox to make them scale perfectly to any size
@@ -53,7 +54,7 @@ export default function LevelCutlery({ onWin }) {
     const height = window.innerHeight;
     
     // Drawer is the top 75% of the screen
-    const drawerBottom = height * 0.75;
+    const drawerBottom = height * 0.40;
 
     if (droppedY < drawerBottom) {
       let isCorrect = false;
@@ -102,6 +103,7 @@ export default function LevelCutlery({ onWin }) {
           <motion.div
             key={item.id}
             drag
+            onDragStart={() => playSound('pop')}
             dragConstraints={containerRef}
             dragElastic={0.1}
             whileDrag={{ scale: 1.2, zIndex: 100 }}
@@ -139,12 +141,12 @@ const styles = {
     borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', color: '#555'
   },
   drawerContainer: {
-    height: '75%', // Takes up top 75%
+    height: '40vh', // <--- Force it to be smaller (40% of viewport)
     background: '#f4f4f4',
-    margin: '50px 20px 0 20px', // Push down slightly for header
+    margin: '60px 20px 0 20px', 
     borderRadius: '15px 15px 0 0',
     display: 'flex',
-    boxShadow: 'inset 0 5px 20px rgba(0,0,0,0.05), 0 5px 10px rgba(0,0,0,0.1)',
+    boxShadow: 'inset 0 5px 20px rgba(0,0,0,0.05)',
     border: '1px solid #ddd'
   },
   slot: {
@@ -155,8 +157,9 @@ const styles = {
     opacity: 0.15, width: '50%', height: '50%'
   },
   pileContainer: {
-    flex: 1, // Takes remaining space (bottom)
-    background: 'rgba(0,0,0,0.03)',
+    flex: 1, 
+    height: '50vh', // <--- Explicitly give the pile space
+    background: 'rgba(255,255,255,0.3)', // Lighter background to see items
     position: 'relative',
     margin: '0 20px 20px 20px',
     borderRadius: '0 0 15px 15px'

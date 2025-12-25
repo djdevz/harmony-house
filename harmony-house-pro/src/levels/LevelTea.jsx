@@ -19,8 +19,17 @@ export default function LevelTea({ onWin }) {
 
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ position:'absolute', top:10, left:20 }}><Link to="/" style={{textDecoration:'none'}}>← Menu</Link></div>
-      
+      <div style={{ position:'absolute', top:10, left:20 }}>
+  <Link to="/" style={{ textDecoration: 'none' }}>
+     <button style={{
+        background: 'rgba(255,255,255,0.8)', border: 'none', padding: '10px 20px',
+        borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold', color: '#555',
+        boxShadow: '0 2px 5px rgba(0,0,0,0.1)', fontFamily: 'Quicksand'
+     }}>
+       ← Menu
+     </button>
+  </Link>
+</div>
       <h2 style={{ marginBottom: 40, color:'#555' }}>Gradient Sort</h2>
       
       <div style={{ padding: 30, background: 'rgba(255,255,255,0.5)', borderRadius: 20 }}>
